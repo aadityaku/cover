@@ -7,7 +7,7 @@ import CardList from "./CardList";
 
 export default function Card(){
     
-    const naigate = useNavigate()
+    const navigate = useNavigate()
 
     const { data , error , isLoading} = useGetAllProductQuery()
     if(isLoading){
@@ -31,7 +31,7 @@ export default function Card(){
                     <Grid container spacing={2}>
                     {
                     data?.map((key,value)=>(
-                        <Grid item xs={3} key={value} style={{}} onClick={() => naigate(`/product/${key.slug}`)}>
+                        <Grid item xs={3} key={value} style={{}} onClick={() => navigate(`/product/${key.slug}`)}>
                             <CardList title={key.title} category={key.subCategory} image={key.image} price={key.price}/> 
                         </Grid>
                     ))

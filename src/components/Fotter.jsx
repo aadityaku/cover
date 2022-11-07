@@ -1,10 +1,16 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useGetAllProdutByIdQuery } from "../features/Category/Category";
 
+import { useNavigate, useParams } from "react-router-dom";
+import {  useAddProductQuery, useGetAllProdutByIdQuery } from "../features/Category/Category";
+import { getToken} from "../services/LocalStorageService";
 export default function Fotter(){
     const a = useParams();
-    const {data,error,isLoading} = useGetAllProdutByIdQuery(a.slug)
+    const {data,error,isLoading} = useGetAllProdutByIdQuery(a.slug);
+    // const cart = useAddProductQuery(a.slug);
+    const navigate= useNavigate()
+    
+    // console.log(typeof(useAddProductQuery(a.slug)));
+   
     if(isLoading){
         return(
             <div className="h2">Loading...</div>
@@ -15,7 +21,21 @@ export default function Fotter(){
             <div className="h2">Error...</div>
         )
     }
+    const {access_token} = getToken()
     
+    
+    const  AddToCart =  (slug) => {
+        const addToCart = useAddProductQuery({slug , access_token})
+        //  const res= await addToCart({slug,access_token})
+        //  if(res.error){
+        //     navigate('/')
+        //  }
+        //  if(res.data){
+        //     navigate('/cart')
+        //  }
+        
+    }
+   
     const image = "http://127.0.0.1:8000" + data.image
     return (
         <Card sx={{maxWidth:345}}>
@@ -29,7 +49,7 @@ export default function Fotter(){
             </CardActionArea>
             <CardActions>
                 <Button color="secondary" sx={{flexGrow:10}} variant="outlined" >Buy Now</Button>
-                <Button sx={{flexGrow:10}} variant="outlined" color="success">Add to Cart</Button>
+                <Button  sx={{flexGrow:10}} onClick={() => AddToCart(a.slug)} variant="outlined" color="success">Add to Cart</Button>
             </CardActions>
         </Card>
     )

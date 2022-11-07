@@ -25,17 +25,44 @@ export const categoryApi = createApi({
                 method: "GET"
             })
         }),
-        addProduct: builder.mutation({
-            query: (update) => ({
-                url: `add-to-cart/${update}/`,
-                method: "PUT",
-                body: update,
-                headers: {
-                    "Content-type": 'application/json; charset=UTF-8',
+        addProduct: builder.query({
+            query: (slug,access_token) => {
+                console.log(slug)
+                console.log(access_token)
+                return {
+                    url: `add-to-cart/${slug}/`,
+                    method: "GET",
+                    headers: {
+                    'authorization':`Bearer ${access_token}`,
                 }
-            })
+            }
+                }
+        }),
+        registerUser: builder.mutation({
+            query:(user) => {
+                return {
+                    url:'register-user/',
+                    method:'POST',
+                    body:user,
+                    headers: {
+                        'Content-type':'application/json',
+                    }
+                }
+            }
+        }),
+        loginUser: builder.mutation({
+            query:(user) => {
+                return {
+                    url:'login/',
+                    method:"POST",
+                    body:user,
+                    headers: {
+                        'Content-type':'application/json',
+                    }
+                }
+            }
         })
     })
 
 })
-export const { useGetAllCategoryQuery , useGetAllProductQuery,useGetAllProdutByIdQuery,useAddProductMutation} = categoryApi
+export const { useGetAllCategoryQuery , useGetAllProductQuery,useGetAllProdutByIdQuery,useAddProductQuery,useRegisterUserMutation,useLoginUserMutation} = categoryApi

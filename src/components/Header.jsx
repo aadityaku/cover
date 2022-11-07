@@ -1,9 +1,15 @@
 import {AppBar, Button, Toolbar, Typography} from "@mui/material"
+import { useDispatch } from "react-redux";
 
-import { Link} from "react-router-dom"
+
+import { Link, useNavigate} from "react-router-dom"
+import { unSetUserToken } from "../features/auth/authSlice";
 import { useGetAllCategoryQuery } from "../features/Category/Category";
+import { getToken, removeToken } from "../services/LocalStorageService";
 export default function Header(){
-    
+    const {access_token} = getToken()
+    const navigate=useNavigate()
+    const dispatch=useDispatch()
     const { data, error, isLoading }  = useGetAllCategoryQuery()
     // console.log(data)
     if(isLoading) {
@@ -16,6 +22,12 @@ export default function Header(){
             <div className="h2">Error..</div>
         )
     }
+    
+    const handleLogout = () => {
+        dispatch(unSetUserToken({access_token:null}))
+        removeToken();
+        navigate('/login')
+    }
     return(
         <>
         <AppBar position="static" sx={{}}>
@@ -27,7 +39,9 @@ export default function Header(){
                
                 
                 <Button title="Login" variant="inherit"  sx={{fontSize:16}} component={Link} to="/">Home</Button>
-                <Button title="Login" variant="inherit"  sx={{fontSize:16}} component={Link} to="/login">Login</Button>
+                {
+                    access_token ? <Button title="Login" variant="inherit"  sx={{fontSize:16}} onClick={() => handleLogout()} >Logout</Button>: <Button title="Login" variant="inherit"  sx={{fontSize:16}} component={Link} to="/login">Login</Button>
+                }
             
                 <Button title="Cart" variant="inherit" sx={{fontSize:16}} component={Link} to="/cart">Cart</Button>
 
