@@ -25,13 +25,13 @@ export const categoryApi = createApi({
                 method: "GET"
             })
         }),
-        addProduct: builder.query({
-            query: (slug,access_token) => {
+        addProduct: builder.mutation({
+            query: ({slug,access_token}) => {
                 console.log(slug)
                 console.log(access_token)
                 return {
                     url: `add-to-cart/${slug}/`,
-                    method: "GET",
+                    method: "POST",
                     headers: {
                     'authorization':`Bearer ${access_token}`,
                 }
@@ -65,4 +65,4 @@ export const categoryApi = createApi({
     })
 
 })
-export const { useGetAllCategoryQuery , useGetAllProductQuery,useGetAllProdutByIdQuery,useAddProductQuery,useRegisterUserMutation,useLoginUserMutation} = categoryApi
+export const { useGetAllCategoryQuery , useGetAllProductQuery,useGetAllProdutByIdQuery,useAddProductMutation,useRegisterUserMutation,useLoginUserMutation} = categoryApi

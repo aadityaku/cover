@@ -1,15 +1,20 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Container } from "@mui/system";
+import { useEffect,useState } from "react";
+
 
 import { useNavigate, useParams } from "react-router-dom";
 import {  useAddProductQuery, useGetAllProdutByIdQuery } from "../features/Category/Category";
 import { getToken} from "../services/LocalStorageService";
+import ProductAddTable from "./ProductAddTable";
 export default function Fotter(){
     const a = useParams();
     const {data,error,isLoading} = useGetAllProdutByIdQuery(a.slug);
-    // const cart = useAddProductQuery(a.slug);
-    const navigate= useNavigate()
+    const[counter,setCounter] = useState(0)
+   
     
-    // console.log(typeof(useAddProductQuery(a.slug)));
+    const {access_token} = getToken()
+   const arr =[]
    
     if(isLoading){
         return(
@@ -21,36 +26,42 @@ export default function Fotter(){
             <div className="h2">Error...</div>
         )
     }
-    const {access_token} = getToken()
-    
-    
-    const  AddToCart =  (slug) => {
-        const addToCart = useAddProductQuery({slug , access_token})
-        //  const res= await addToCart({slug,access_token})
-        //  if(res.error){
-        //     navigate('/')
-        //  }
-        //  if(res.data){
-        //     navigate('/cart')
-        //  }
-        
-    }
    
-    const image = "http://127.0.0.1:8000" + data.image
+    const image = "http://127.0.0.1:8000" + data.image 
+    if(data.image1 !== "" || data.image2 !== "" || data.image3 !=="" || data.image4 !==" "){
+       arr.push(image)
+       arr.push("http://127.0.0.1:8000" + data.image1)
+       arr.push("http://127.0.0.1:8000" + data.image2)
+       arr.push("http://127.0.0.1:8000" + data.image3)
+       arr.push("http://127.0.0.1:8000" + data.image4)
+    }
+    
+    // useEffect(() => {
+    //     const internalData = setInterval(() => {
+    //             (counter == 5) ? setCounter(0) : setCounter(counter + 1)
+    //         },2000)
+    //         return () => clearInterval(internalData)
+    // },[counter])
+    
     return (
-        <Card sx={{maxWidth:345}}>
+        <Container>
+            <Grid container sx={{mt:5}}>
+                <Grid item={4}>
+                <Card sx={{maxWidth:345}}>
             <CardActionArea>
                 <CardMedia component="img" height="170" image={image}/>
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h5">{data.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{data.price}/-</Typography>
-                </CardContent>
-               
+            
             </CardActionArea>
-            <CardActions>
-                <Button color="secondary" sx={{flexGrow:10}} variant="outlined" >Buy Now</Button>
-                <Button  sx={{flexGrow:10}} onClick={() => AddToCart(a.slug)} variant="outlined" color="success">Add to Cart</Button>
-            </CardActions>
+            
         </Card>
+                </Grid>
+                <Grid item={6} style={{alignItems:"center"}}>
+                
+                        <ProductAddTable data={data} access_token={access_token} />
+                            
+                        
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
