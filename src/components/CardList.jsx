@@ -1,7 +1,7 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 
 export default function CardList(props){
-    const image = "http://127.0.0.1:8000" + props.image
+    const image = "https://ecom-aaditya.herokuapp.com" + props.image
     return (
         <Card sx={{maxWidth:345}}>
             <CardActionArea>
